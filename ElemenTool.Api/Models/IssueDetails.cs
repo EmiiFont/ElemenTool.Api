@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SQLite;
+using ElemenTool.Api.com.elementool.www;
 
 namespace ElemenTool.CacheLayer.Entities
 {
@@ -43,5 +44,7 @@ namespace ElemenTool.CacheLayer.Entities
         public string DevCompDate     {get; set;}
         public string DaysSinceIssueCreated {get; set;}
         public string QACompDate      {get; set;}
+
+       
     }
 }

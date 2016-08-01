@@ -81,5 +81,12 @@ namespace ElemenTool.CacheLayer.Infrastructure
             }
             return d;
         }
+
+        public IssueDetails SaveIssue(IssueDetails issueDetails)
+        {
+            _elementoolApi = new ElementoolApi(_accountItem.AccountName, _accountItem.UserName, _accountItem.Password);
+
+            return _elementoolApi.SaveIssue(issueDetails);
+        }
     }
 }

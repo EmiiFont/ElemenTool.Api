@@ -10,59 +10,67 @@ using ElemenTool.CacheLayer.Infrastructure;
 using ElemenTool.Api.Infrastructure;
 using System.Collections.Generic;
 using ElemenTool.CacheLayer.Entities;
+using System;
+using Microsoft.WindowsAzure.Storage;
+using ElemenTool.Api.Infrastructure.AzureStorage;
 
 namespace ElemenTool.Api.Controllers
 {
-    public class ElemenToolController : TableController<TodoItem>
+    public class ElemenToolController : ApiController
     {
         private ElementService _elementService;
         private ICache _cacheLayer;
+        private AzureContext _context;
 
-        protected override void Initialize(HttpControllerContext controllerContext)
+        public ElemenToolController()
         {
-            base.Initialize(controllerContext);
-            MobileServiceContext context = new MobileServiceContext();
-            DomainManager = new EntityDomainManager<TodoItem>(context, Request, Services);
+            _context = new AzureContext();
+
             _cacheLayer = new SqliteCache();
             _elementService = new ElementService(_cacheLayer);
         }
 
-        // GET tables/TodoItem
-        [Route("api/getIssues")]
-        public List<Issue> GetIssues([FromUri]ElemenToolItem item)
+        public async void PostLogin([FromUri]ElemenToolItem item)
         {
+             item.CreatedAt = DateTime.Now;
+             item.UpdatedAt = DateTime.Now;
+
+            item.PartitionKey = item.AccountName;
+            item.RowKey = item.UserName;
+            _context.InsertElementToolEntity(item);
+        }
+
+        // GET tables/TodoItem
+        public List<Issue> GetIssues(string user)
+        {
+            var accountName = user.Split('@')[0];
+            var username = user.Split('@')[1];
+
+            var item = _context.GetAccountItem(accountName, username);
             _elementService._accountItem = item;
+
             var result = _elementService.GetIssueList();
             return result;
         }
 
         // GET tables/TodoItem/48D68C86-6EA6-4C25-AA33-223FC9A27959
-        [Route("api/getIssueDetails")]
-        public async Task<IssueDetails> GetIssueDetails(int id, [FromUri]ElemenToolItem item)
+        public async Task<IssueDetails> GetIssueDetails(int id, string user)
         {
+            var accountName = user.Split('@')[0];
+            var username = user.Split('@')[1];
+
+            var item = _context.GetAccountItem(accountName, username);
+
             _elementService._accountItem = item;
             var result = _elementService.GetIssueDetails(id).Result;
 
             return result;
         }
 
-        // PATCH tables/TodoItem/48D68C86-6EA6-4C25-AA33-223FC9A27959
-        public Task<TodoItem> PatchTodoItem(string id, Delta<TodoItem> patch)
-        {
-            return UpdateAsync(id, patch);
-        }
-
-        // POST tables/TodoItem
-        public async Task<IHttpActionResult> PostTodoItem(TodoItem item)
-        {
-            TodoItem current = await InsertAsync(item);
-            return CreatedAtRoute("Tables", new { id = current.Id }, current);
-        }
-
         // DELETE tables/TodoItem/48D68C86-6EA6-4C25-AA33-223FC9A27959
         public Task DeleteTodoItem(string id)
         {
-            return DeleteAsync(id);
+            return new Task(() => { });
         }
     }
 }

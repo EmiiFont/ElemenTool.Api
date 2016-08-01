@@ -8,6 +8,7 @@ using ElemenTool.CacheLayer.Entities;
 using Microsoft.Web.Services2.Security;
 using Microsoft.Web.Services2.Security.Tokens;
 using ElemenTool.Api.com.elementool.www;
+using ElemenTool.Api.Infrastructure.helpers;
 
 namespace ElemenTool.CacheLayer.Infrastructure
 {
@@ -33,7 +34,6 @@ namespace ElemenTool.CacheLayer.Infrastructure
             btService.RequestSoapContext.Security.Tokens.Add(token);
             btService.RequestSoapContext.Security.Elements.Add(new MessageSignature(token));
             //this method does nothing but throws an exception if login info is incorrect
-            btService.LoginCheck();
 
             var listOfIssues = new List<Issue>();
 
@@ -73,7 +73,6 @@ namespace ElemenTool.CacheLayer.Infrastructure
             btService.RequestSoapContext.Security.Elements.Add(new MessageSignature(token));
            
             //this method does nothing but throws an exception if login info is incorrect
-            btService.LoginCheck();
             
             BugTrackingIssue repList = btService.GetIssueByNum(issueNumber);
             
@@ -109,6 +108,26 @@ namespace ElemenTool.CacheLayer.Infrastructure
             issue.QACompDate = repList.FieldsArray[27].Value;
 
             return issue;
+        }
+
+        public IssueDetails SaveIssue(IssueDetails issueDetails)
+        {
+            //create an instance of the proxy class
+            var btService = new BugTracking();
+
+            //(user name = "account\username")
+            UsernameToken token = new UsernameToken(_eToolAccountName + @"\" + _eToolUserName, _eToolUserPasswd, PasswordOption.SendHashed);
+            btService.RequestSoapContext.Security.Tokens.Add(token);
+            btService.RequestSoapContext.Security.Elements.Add(new MessageSignature(token));
+
+
+            BugTrackingIssue Issue = btService.GetIssueByNum(issueDetails.IssueNumber);
+
+            var issue = BugTrackingIssueHelpers.SetBugTrackingIssueFields(Issue, issueDetails);
+
+            BugTrackingIssue savedIssue = btService.SaveIssue(issue);
+
+            return BugTrackingIssueHelpers.GetNewIssueDetails(savedIssue);
         }
 
     }

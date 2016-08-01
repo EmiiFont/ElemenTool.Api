@@ -20,12 +20,18 @@ namespace ElemenTool.Api
             // Use this class to set WebAPI configuration options
             HttpConfiguration config = ServiceConfig.Initialize(new ConfigBuilder(options));
 
+            config.Routes.MapHttpRoute(
+                name: "ControllersApi",
+                 routeTemplate: "api/{controller}/{action}/{id}",
+                    defaults: new { id = RouteParameter.Optional }
+            );
+
             // To display errors in the browser during development, uncomment the following
             // line. Comment it out again when you deploy your service for production use.
             // config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/octet-stream"));
             
-                Database.SetInitializer(new MobileServiceInitializer());
+            Database.SetInitializer(new MobileServiceInitializer());
             config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
         }
     }
@@ -34,17 +40,6 @@ namespace ElemenTool.Api
     {
         protected override void Seed(MobileServiceContext context)
         {
-            List<TodoItem> todoItems = new List<TodoItem>
-            {
-                new TodoItem { Id = Guid.NewGuid().ToString(), Text = "First item", Complete = false },
-                new TodoItem { Id = Guid.NewGuid().ToString(), Text = "Second item", Complete = false },
-            };
-
-            foreach (TodoItem todoItem in todoItems)
-            {
-                context.Set<TodoItem>().Add(todoItem);
-            }
-
             base.Seed(context);
         }
     }

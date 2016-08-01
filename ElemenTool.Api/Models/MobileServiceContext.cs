@@ -27,7 +27,20 @@ namespace ElemenTool.Api.Models
         {
         }
 
-        public DbSet<TodoItem> TodoItems { get; set; }
+        public DbSet<ElemenToolItem> ElemenToolItems
+        {
+            get;
+            set;
+        }
+
+        static MobileServiceContext _instance;
+        public static MobileServiceContext Instance
+        {
+            get
+            {
+                return _instance ?? (_instance = new MobileServiceContext());
+            }
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -36,6 +49,8 @@ namespace ElemenTool.Api.Models
             {
                 modelBuilder.HasDefaultSchema(schema);
             }
+
+            modelBuilder.Entity<ElemenToolItem>().ToTable("ElemenToolItem");
 
             modelBuilder.Conventions.Add(
                 new AttributeToColumnAnnotationConvention<TableColumnAttribute, string>(

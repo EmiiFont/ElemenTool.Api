@@ -14,6 +14,8 @@ namespace ElemenTool.CacheLayer.Infrastructure
         Task<IssueDetails> GetIssueDetails(int issueNumber);
         List<Issue> GetIssueList(bool refresh = false);
 
+        IssueDetails SaveIssue(IssueDetails issueDetails);
+
         Task<IssueDetails> GetRefreshedIssueDetails(IssueDetails cachedIssueDetails);
     }
 }
