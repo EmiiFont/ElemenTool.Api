@@ -21,6 +21,12 @@ namespace ElemenTool.Api
             HttpConfiguration config = ServiceConfig.Initialize(new ConfigBuilder(options));
 
             config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "ControllersApi",
                  routeTemplate: "api/{controller}/{action}/{id}",
                     defaults: new { id = RouteParameter.Optional }

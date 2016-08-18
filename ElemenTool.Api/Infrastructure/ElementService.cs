@@ -88,5 +88,13 @@ namespace ElemenTool.CacheLayer.Infrastructure
 
             return _elementoolApi.SaveIssue(issueDetails);
         }
+
+        public bool CanLogin(ElemenToolItem item)
+        {
+            _elementoolApi = new ElementoolApi();
+            var canLogin = _elementoolApi.LoginCheck(item);
+
+            return canLogin;
+        }
     }
 }

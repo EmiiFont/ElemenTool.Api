@@ -268,7 +268,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\ElemenToolController.cs" />
+    <Compile Include="Controllers\IssuesController.cs" />
     <Compile Include="DataObjects\ElemenToolItem.cs" />
     <Compile Include="DataObjects\TodoItem.cs" />
     <Compile Include="Infrastructure\AzureStorage\AzureContext.cs" />
@@ -278,6 +278,7 @@
     <Compile Include="Infrastructure\helpers\BugTrackingIssueHelpers.cs" />
     <Compile Include="Infrastructure\ICache.cs" />
     <Compile Include="Infrastructure\IElementService.cs" />
+    <Compile Include="Infrastructure\IssueSystemFields.cs" />
     <Compile Include="Infrastructure\SqliteCache.cs" />
     <Compile Include="Migrations\201607271616064_initial.cs" />
     <Compile Include="Migrations\201607271616064_initial.Designer.cs">

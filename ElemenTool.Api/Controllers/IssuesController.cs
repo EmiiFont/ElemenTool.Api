@@ -16,13 +16,13 @@ using ElemenTool.Api.Infrastructure.AzureStorage;
 
 namespace ElemenTool.Api.Controllers
 {
-    public class ElemenToolController : ApiController
+    public class IssuesController : ApiController
     {
         private ElementService _elementService;
         private ICache _cacheLayer;
         private AzureContext _context;
 
-        public ElemenToolController()
+        public IssuesController()
         {
             _context = new AzureContext();
 
@@ -30,14 +30,28 @@ namespace ElemenTool.Api.Controllers
             _elementService = new ElementService(_cacheLayer);
         }
 
-        public async void PostLogin([FromUri]ElemenToolItem item)
+        public bool PostLogin(ElemenToolItem item)
         {
-             item.CreatedAt = DateTime.Now;
-             item.UpdatedAt = DateTime.Now;
+            item.CreatedAt = DateTime.Now;
+            item.UpdatedAt = DateTime.Now;
 
             item.PartitionKey = item.AccountName;
             item.RowKey = item.UserName;
-            _context.InsertElementToolEntity(item);
+            var existing = _context.GetAccountItem(item.AccountName, item.UserName);
+
+            if (existing == null)
+            {
+                _context.InsertElementToolEntity(item);
+            }
+            else
+            {
+                if (existing.Password != item.Password)
+                {
+                    //update item
+                }
+            }
+           
+            return _elementService.CanLogin(item);
         }
 
         // GET tables/TodoItem
@@ -53,19 +67,19 @@ namespace ElemenTool.Api.Controllers
             return result;
         }
 
-        // GET tables/TodoItem/48D68C86-6EA6-4C25-AA33-223FC9A27959
-        public async Task<IssueDetails> GetIssueDetails(int id, string user)
-        {
-            var accountName = user.Split('@')[0];
-            var username = user.Split('@')[1];
+        //// GET tables/TodoItem/48D68C86-6EA6-4C25-AA33-223FC9A27959
+        //public async Task<IssueDetails> GetIssueDetails(int id, string user)
+        //{
+        //    var accountName = user.Split('@')[0];
+        //    var username = user.Split('@')[1];
 
-            var item = _context.GetAccountItem(accountName, username);
+        //    var item = _context.GetAccountItem(accountName, username);
 
-            _elementService._accountItem = item;
-            var result = _elementService.GetIssueDetails(id).Result;
+        //    _elementService._accountItem = item;
+        //    var result = _elementService.GetIssueDetails(id).Result;
 
-            return result;
-        }
+        //    return result;
+        //}
 
         // DELETE tables/TodoItem/48D68C86-6EA6-4C25-AA33-223FC9A27959
         public Task DeleteTodoItem(string id)
