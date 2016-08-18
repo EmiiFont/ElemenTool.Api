@@ -11,7 +11,7 @@ namespace Elementool.Test
         [TestMethod]
         public void GetIssuesShouldReturnAListOfIssues()
         {
-            var api = new ElementoolApi("theabsgroup","EFont","Emilio223");
+            var api = new ElementoolApi("","","");
             var mylist = api.GetIssueList();
             api.GetIssueDetails(mylist.First().IssueNumber);
         }
