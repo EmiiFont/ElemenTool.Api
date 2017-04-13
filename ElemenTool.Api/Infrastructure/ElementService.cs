@@ -11,13 +11,13 @@ namespace ElemenTool.CacheLayer.Infrastructure
 {
     public class ElementService : IElementService
     {
-        private readonly ICache _sqliteCache;
+        private readonly ICache _documentStorage;
         private ElementoolApi _elementoolApi;
         public ElemenToolItem _accountItem;
 
-        public ElementService(ICache sqliteCache)
+        public ElementService(ICache documentStorage)
         {
-            _sqliteCache = sqliteCache;
+            _documentStorage = documentStorage;
         }
 
         public IssueDetails AddIssueDetails(IssueDetails issueDetails)
@@ -47,24 +47,24 @@ namespace ElemenTool.CacheLayer.Infrastructure
            // return cachedIssue;
         }
 
-        public List<Issue> GetIssueList(bool refresh = false)
+        public async Task<List<Issue>> GetIssueList(bool refresh = false)
         {
             _elementoolApi = new ElementoolApi(_accountItem.AccountName, _accountItem.UserName, _accountItem.Password);
 
             //TODO: check for cache date if is more than 3 hours load from api.
-            //if (_sqliteCache.GetIssueListFromStore().Count == 0)
-            //{
+            if (_documentStorage.GetIssueListFromStore().Count == 0)
+            {
                 var issuelist = _elementoolApi.GetIssueList();
-                Task.Run(() => _sqliteCache.AddIssueList(null, issuelist));
-                
-                return issuelist;
-           // }
-            //if (refresh)
-            //{
-             //  return _elementoolApi.GetIssueList();
-            //}
+                await Task.Run(() => _documentStorage.AddIssueList(null, issuelist));
 
-           /// return _sqliteCache.GetIssueListFromStore();
+                return issuelist;
+            }
+            if (refresh)
+            {
+                return _elementoolApi.GetIssueList();
+            }
+
+            return _documentStorage.GetIssueListFromStore();
         }
 
         public async Task<IssueDetails> GetRefreshedIssueDetails(IssueDetails cachedIssueDetails)
@@ -77,7 +77,7 @@ namespace ElemenTool.CacheLayer.Infrastructure
 
             if (!d.Serialize().Equals(cachedIssueDetails.Serialize()))
             {
-                await _sqliteCache.AddIssueDetails(null, d);
+                await _documentStorage.AddIssueDetails(null, d);
             }
             return d;
         }

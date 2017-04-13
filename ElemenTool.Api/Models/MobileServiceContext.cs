@@ -1,8 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
-using Microsoft.WindowsAzure.Mobile.Service;
-using Microsoft.WindowsAzure.Mobile.Service.Tables;
 using ElemenTool.Api.DataObjects;
 
 namespace ElemenTool.Api.Models
@@ -44,17 +42,17 @@ namespace ElemenTool.Api.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            string schema = ServiceSettingsDictionary.GetSchemaName();
-            if (!string.IsNullOrEmpty(schema))
-            {
-                modelBuilder.HasDefaultSchema(schema);
-            }
+            //string schema = ServiceSettingsDictionary.GetSchemaName();
+            //if (!string.IsNullOrEmpty(schema))
+            //{
+            //    modelBuilder.HasDefaultSchema(schema);
+            //}
 
-            modelBuilder.Entity<ElemenToolItem>().ToTable("ElemenToolItem");
+            //modelBuilder.Entity<ElemenToolItem>().ToTable("ElemenToolItem");
 
-            modelBuilder.Conventions.Add(
-                new AttributeToColumnAnnotationConvention<TableColumnAttribute, string>(
-                    "ServiceTableColumn", (property, attributes) => attributes.Single().ColumnType.ToString()));
+            //modelBuilder.Conventions.Add(
+            //    new AttributeToColumnAnnotationConvention<TableColumnAttribute, string>(
+            //        "ServiceTableColumn", (property, attributes) => attributes.Single().ColumnType.ToString()));
         }
     }
 

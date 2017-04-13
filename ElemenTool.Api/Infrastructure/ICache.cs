@@ -23,7 +23,7 @@ namespace ElemenTool.Api.Infrastructure
         /// <param name="cacheKey">key to lookup item</param>
         /// <param name="item">the item to store</param>
         /// <returns></returns>
-        Task<List<Issue>> AddIssueList(string cacheKey, List<Issue> item);
+        void AddIssueList(string cacheKey, List<Issue> item);
 
         IssueDetails GetIssueDetailsFromStore(int issueNumber);
 

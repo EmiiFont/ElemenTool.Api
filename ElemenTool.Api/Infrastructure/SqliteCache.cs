@@ -55,5 +55,10 @@ namespace ElemenTool.CacheLayer.Infrastructure
                 return conn.Table<Issue>().ToList();
             }
         }
+
+        void ICache.AddIssueList(string cacheKey, List<Issue> item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

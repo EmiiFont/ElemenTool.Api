@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SQLite;
+using Newtonsoft.Json;
 
 namespace ElemenTool.CacheLayer.Entities
 {
     public class Issue
     {
-        [PrimaryKey, AutoIncrement, Column("_id")]
+        [JsonProperty(PropertyName = "id")]
         public int Id { get; set; }
-        [Indexed]
-        public int IssueNumber { get; set; }
         public string Title { get; set; }
         public string SubmittedBy { get; set; }
         public DateTime SubmittedIn  { get; set; }
@@ -20,5 +19,7 @@ namespace ElemenTool.CacheLayer.Entities
         public string Status { get; set; }
         public string Product { get; set; }
         public string AssignedTo { get; internal set; }
+        public string AccountName { get; internal set; }
+        public DateTime LastUpdateDate { get; internal set; }
     }
 }

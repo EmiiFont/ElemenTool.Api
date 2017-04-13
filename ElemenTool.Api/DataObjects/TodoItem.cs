@@ -1,8 +1,7 @@
-﻿using Microsoft.WindowsAzure.Mobile.Service;
-
+﻿
 namespace ElemenTool.Api.DataObjects
 {
-    public class TodoItem : EntityData
+    public class TodoItem 
     {
         public string Text { get; set; }
 

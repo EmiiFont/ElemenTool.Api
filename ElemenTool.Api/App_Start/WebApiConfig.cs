@@ -5,8 +5,8 @@ using System.Data.Entity;
 using System.Web.Http;
 using ElemenTool.Api.DataObjects;
 using ElemenTool.Api.Models;
-using Microsoft.WindowsAzure.Mobile.Service;
 using System.Net.Http.Headers;
+using System.EnterpriseServices;
 
 namespace ElemenTool.Api
 {
@@ -14,11 +14,9 @@ namespace ElemenTool.Api
     {
         public static void Register()
         {
-            // Use this class to set configuration options for your mobile service
-            ConfigOptions options = new ConfigOptions();
 
             // Use this class to set WebAPI configuration options
-            HttpConfiguration config = ServiceConfig.Initialize(new ConfigBuilder(options));
+            HttpConfiguration config = new HttpConfiguration();
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",

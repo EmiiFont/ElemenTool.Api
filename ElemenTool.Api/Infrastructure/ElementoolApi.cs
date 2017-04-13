@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
-using System.Runtime.Remoting.Messaging;
-using System.Threading.Tasks;
 using ElemenTool.CacheLayer.Entities;
 using Microsoft.Web.Services2.Security;
 using Microsoft.Web.Services2.Security.Tokens;
@@ -45,6 +42,8 @@ namespace ElemenTool.CacheLayer.Infrastructure
             var listOfIssues = new List<Issue>();
 
             IssueField[] repList = btService.GetCustomReportQueryFields(false);
+
+           
             var fields = GetSystemFieldsCaption(repList);
 
             string descr = "";
@@ -56,12 +55,14 @@ namespace ElemenTool.CacheLayer.Infrastructure
                 foreach (DataRow row in table.Rows)
                 {
                     var issue = new Issue();
-                    issue.IssueNumber = Convert.ToInt32(row["Issue Number"]);
+                    issue.Id = Convert.ToInt32(row["Issue Number"]);
                     issue.Product = row[fields.Product] as string;
                     issue.Title = row[fields.Title] as string;
                     issue.Status = row[fields.Status] as string;
+                    issue.AccountName = _eToolAccountName;
                     issue.AssignedTo = row[fields.AssignedTo] as string;
                     issue.SubmittedBy = row[fields.SubmittedBy] as string;
+                    //issue.LastUpdateDate = GetLastUpdateDate(btService, issue.Id);
                     issue.SubmittedIn = string.IsNullOrEmpty(Convert.ToString(row[fields.SubmittedIn])) ? DateTime.MinValue : Convert.ToDateTime(row[fields.SubmittedIn]);
                     listOfIssues.Add(issue);
                 }
@@ -90,6 +91,7 @@ namespace ElemenTool.CacheLayer.Infrastructure
 
             return true;
         }
+
 
         public IssueDetails GetIssueDetails(int issueNumber)
         {
@@ -162,6 +164,27 @@ namespace ElemenTool.CacheLayer.Infrastructure
             issueSystemFields.AssignedTo = repList.First(v => v.SystemName == "assigned_to").Caption;
 
             return issueSystemFields;
+        }
+
+        private DateTime GetLastUpdateDate(BugTracking btService, int issueNumber)
+        {
+            DateTime res = new DateTime();
+
+            var d = btService.GetIssueHistory(issueNumber);
+
+            foreach (DataTable table in d.Tables)
+            {
+                foreach (DataRow row in table.Rows)
+                {
+                    var date = row[5];
+                    var time = row[6];
+                    var dateTim = DateTime.TryParse(date + " " + time, out res);
+
+                    break;
+                }
+            }
+
+            return res;
         }
     }
 }

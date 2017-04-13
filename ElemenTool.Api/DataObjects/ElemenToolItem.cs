@@ -1,5 +1,5 @@
-﻿using Microsoft.WindowsAzure.Mobile.Service;
-using Microsoft.WindowsAzure.Storage.Table;
+﻿using Microsoft.WindowsAzure.Storage.Table;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,19 +10,18 @@ namespace ElemenTool.Api.DataObjects
 {
     public class ElemenToolItem : TableEntity
     {
-        public ElemenToolItem(string AccountName, string UserName)
-        {
-            this.PartitionKey = AccountName;
-            this.RowKey = UserName;
-        }
-
-        public ElemenToolItem() { }
-  
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
         public string AccountName { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
         public string JwtToken { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 }
