@@ -243,5 +243,5 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-/ElemenTool.Api/appSettings.config
-/ElemenTool.Api/connectionStrings.config
+/ElementTool.WebApi/appSettings.config
+

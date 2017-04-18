@@ -36,9 +36,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.2\lib\net45\System.Web.Http.dll</HintPath>
+      <HintPath>..\ElementTool.WebApi\bin\System.Web.Http.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Choose>
@@ -58,13 +59,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ElemenTool.Api\ElemenTool.Api.csproj">
-      <Project>{A9F09CA6-3138-403F-B05E-CA05551CCEA9}</Project>
-      <Name>ElemenTool.Api</Name>
-    </ProjectReference>
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <ProjectReference Include="..\ElementTool.WebApi\ElementTool.WebApi.csproj">
+      <Project>{4ec46944-aeec-46ff-88f5-71b45c9b162b}</Project>
+      <Name>ElementTool.WebApi</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
