@@ -26,7 +26,10 @@ namespace ElementTool.WebApi.Infrastructure.Filters
             var authorization = request.Headers.Authorization;
 
             if (authorization == null || authorization.Scheme != "Bearer")
+            {
+                context.ErrorResult = new AuthenticationFailureResult("Unauthorize Access", request);
                 return;
+            }
 
             if (string.IsNullOrEmpty(authorization.Parameter))
             {
@@ -38,18 +41,24 @@ namespace ElementTool.WebApi.Infrastructure.Filters
             var principal = await AuthenticateJwtToken(token);
 
             if (principal == null)
+            {
                 context.ErrorResult = new AuthenticationFailureResult("Invalid token", request);
-
+            }
             else
+            {
                 context.Principal = principal;
+            }
         }
 
         private static bool ValidateToken(string token, out ElementoolClaim elementoolClaim)
         {
             elementoolClaim = new ElementoolClaim();
             
-
             var simplePrinciple = JwtManager.GetPrincipal(token);
+
+            if (simplePrinciple == null)
+                return false;
+
             var identity = simplePrinciple.Identity as ClaimsIdentity;
 
             if (identity == null)
