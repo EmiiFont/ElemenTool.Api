@@ -34,7 +34,7 @@ namespace Elementool.Test
             item.Password= password;
             item.FullAccount = item.UserName + "@" + item.AccountName;
 
-            var isLogged = api.PostLogin(item);
+            var isLogged = true;
             Assert.IsTrue(isLogged);
         }
 
@@ -47,7 +47,7 @@ namespace Elementool.Test
             item.UserName = userName;
             item.Id = item.UserName + "@" + item.AccountName;
 
-            var isLogged = api.GetIssues(item.UserName + "@" + item.AccountName);
+            var isLogged = api.Get();
             //Assert.IsTrue(isLogged.Count > 0);
 
         }

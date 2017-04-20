@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ElemenTool.CacheLayer.Entities;
-using ElemenTool.Api.Infrastructure;
 using ElemenTool.Api.DataObjects;
 using ElementTool.WebApi.DataObjects;
 
