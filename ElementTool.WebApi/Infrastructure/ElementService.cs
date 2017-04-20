@@ -29,7 +29,7 @@ namespace ElemenTool.CacheLayer.Infrastructure
             throw new NotImplementedException();
         }
 
-        public async Task<IssueDetails> GetIssueDetails(int issueNumber)
+        public IssueDetails GetIssueDetails(int issueNumber)
         {
             _elementoolApi = new ElementoolApi(_accountItem.AccountName, _accountItem.UserName, _accountItem.Password);
 
@@ -91,7 +91,7 @@ namespace ElemenTool.CacheLayer.Infrastructure
 
         public bool CanLogin(ElemenToolItem item)
         {
-            _elementoolApi = new ElementoolApi();
+            _elementoolApi = new ElementoolApi(item.AccountName, item.UserName, item.Password);
             var canLogin = _elementoolApi.LoginCheck(item);
 
             return canLogin;

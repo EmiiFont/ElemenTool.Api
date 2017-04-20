@@ -13,7 +13,7 @@ namespace ElemenTool.CacheLayer.Infrastructure
     {
         IssueDetails AddIssueDetails(IssueDetails issueDetails);
         List<Issue> AddIssueList(List<Issue> issue);
-        Task<IssueDetails> GetIssueDetails(int issueNumber);
+        IssueDetails GetIssueDetails(int issueNumber);
         List<Issue> GetIssueList(bool refresh = false);
 
         IssueDetails SaveIssue(IssueDetails issueDetails);

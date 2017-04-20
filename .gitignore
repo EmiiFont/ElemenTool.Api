@@ -245,3 +245,4 @@ ModelManifest.xml
 .fake/
 /ElementTool.WebApi/appSettings.config
 
+/ElementTool.WebApi/Properties/PublishProfiles

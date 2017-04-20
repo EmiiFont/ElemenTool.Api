@@ -175,11 +175,11 @@ namespace ElemenTool.CacheLayer.Infrastructure
 
             var history = _btService.GetIssueHistory(issueNumber);
 
-            var remarks = _btService.GetIssueRemarks(issueNumber);
+            //var remarks = _btService.GetIssueRemarks(issueNumber);
 
             issue.History = BuildIssueHistory(history);
 
-            issue.Remarks = BuildRemarks(remarks);
+           // issue.Remarks = BuildRemarks(remarks);
 
             issue.IssueNumber = repList.IssueNumber;
             issue.Title = repList.FieldsArray[0].Value;
@@ -189,10 +189,16 @@ namespace ElemenTool.CacheLayer.Infrastructure
 
             foreach (var item in repList.FieldsArray.Skip(4))
             {
+                var value = item.Value;
+
+                if (item.SystemName == "remarks")
+                {
+                    value = System.Web.HttpUtility.HtmlEncode(value);
+                }
                 var fields = new IssueDetailsFields()
                 {
                     Caption = item.Caption,
-                    Value = item.Value,
+                    Value = value,
                     SystemName = item.SystemName,
                     OptionList = item.ValueList
                 };

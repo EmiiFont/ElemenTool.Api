@@ -11,19 +11,25 @@ using FireSharp.Response;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ElementTool.WebApi.DataObjects;
+using Hangfire;
+using System.IO;
+using System.Configuration;
 
 namespace ElementTool.WebApi.Infrastructure.DbStorage
 {
     public class FirebaseStorage : ICache
     {
         private IFirebaseClient _client;
+        private readonly string firebaseUrl = ConfigurationManager.AppSettings["firebaseUrl"];
+        private readonly string authSecret = ConfigurationManager.AppSettings["authSecret"];
         public FirebaseStorage()
         {
+
             IFirebaseConfig config = new FirebaseConfig
             {
-                AuthSecret = "Xh6AenUSzix5IejHnfPRjSefPndMyyYCLfD4mQQ7",
-                BasePath = "https://elementool-436c2.firebaseio.com/"
-               
+                AuthSecret = authSecret,
+                BasePath = firebaseUrl
+
             };
             _client = new FirebaseClient(config);
         }
@@ -39,7 +45,16 @@ namespace ElementTool.WebApi.Infrastructure.DbStorage
 
         public void AddIssueList(string cacheKey, List<Issue> item)
         {
-
+            try
+            {
+                BackgroundJob.Enqueue(() => File.AppendAllText(@"C:\Test\hangfire.txt", Guid.NewGuid().ToString()));
+                RecurringJob.AddOrUpdate(() => File.AppendAllText(@"C:\Test\hangfire.txt", DateTime.Now.ToLongDateString()), Cron.Minutely);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            
         }
 
         public IssueDetails GetIssueDetailsFromStore(int issueNumber)

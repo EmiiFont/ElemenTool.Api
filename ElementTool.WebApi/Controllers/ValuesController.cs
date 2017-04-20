@@ -2,6 +2,8 @@
 using ElemenTool.CacheLayer.Infrastructure;
 using ElementTool.WebApi.Infrastructure;
 using ElementTool.WebApi.Infrastructure.DbStorage;
+using FireSharp;
+using FireSharp.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +30,8 @@ namespace ElementTool.WebApi.Controllers
         // GET api/values
         public IEnumerable<string> Get()
         {
+            _cacheLayer.AddIssueList("key", null);
+
             return new string[] { "value1", "value2" };
         }
 

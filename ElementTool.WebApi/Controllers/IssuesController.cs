@@ -1,63 +1,44 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
 using ElemenTool.CacheLayer.Infrastructure;
-using System.Collections.Generic;
-using ElemenTool.CacheLayer.Entities;
-using System;
 using ElementTool.WebApi.Infrastructure;
 using ElementTool.WebApi.DataObjects;
 using ElementTool.WebApi.Infrastructure.DbStorage;
+using ElementTool.WebApi.Infrastructure.Filters;
+using System.Security.Claims;
 
 namespace ElementTool.WebApi.Controllers
 {
+    [JwtAuthentication]
     public class IssuesController : ApiController
     {
         private ElementService _elementService;
         private ICache _cacheLayer;
-        private ICache _context;
+       
 
         public IssuesController()
         {
-            _context = new FirebaseStorage();
-
             _cacheLayer = new FirebaseStorage();
             _elementService = new ElementService(_cacheLayer);
         }
 
-        public bool PostLogin(ElemenToolItem item)
-        {
-            item.CreatedAt = DateTime.Now;
-            item.UpdatedAt = DateTime.Now;
-
-            var existing = _context.GetAccountItem(item.AccountName, item.UserName);
-
-            if (existing == null)
-            {
-                _context.InsertElementToolEntity(item);
-            }
-            else
-            {
-                if (existing.Password != item.Password)
-                {
-                    existing.Password = item.Password;
-                    _context.UpdateAccountItem(existing);
-                }
-            }
-           
-            return _elementService.CanLogin(item);
-        }
-
         // GET tables/TodoItem
-        public List<Issue> GetIssues(string id)
+        public IHttpActionResult Get()
         {
-            var username = id.Split('@')[0];
-            var accountName = id.Split('@')[1];
-
-            var item = _context.GetAccountItem(accountName, username);
-            _elementService._accountItem = item;
+            _elementService._accountItem = GetItemFromClaims();
 
             var result = _elementService.GetIssueList();
-            return result;
+
+            return Ok(result);
+        }
+
+        public IHttpActionResult Get(int id)
+        {
+            _elementService._accountItem = GetItemFromClaims();
+
+            var result = _elementService.GetIssueDetails(id);
+
+            return Ok(result);
         }
 
         //// GET tables/TodoItem/48D68C86-6EA6-4C25-AA33-223FC9A27959
@@ -78,6 +59,17 @@ namespace ElementTool.WebApi.Controllers
         public Task DeleteTodoItem(string id)
         {
             return new Task(() => { });
+        }
+
+        private ElemenToolItem GetItemFromClaims()
+        {
+            var identity = (ClaimsIdentity)User.Identity;
+            var etItem = new ElemenToolItem();
+            etItem.UserName = identity.FindFirst(ClaimTypes.Name).Value;
+            etItem.Password = identity.FindFirst(ClaimTypes.UserData).Value;
+            etItem.AccountName = identity.FindFirst(ClaimTypes.GroupSid).Value;
+
+            return etItem;
         }
     }
 }
