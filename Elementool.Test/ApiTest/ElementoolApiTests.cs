@@ -26,7 +26,7 @@ namespace Elementool.Test
         [TestMethod]
         public void PostLoginShouldLoginUser()
         {
-            var api = new IssuesController();
+            var api = new IssueDetailController();
             var item = new ElemenToolItem();
             item.AccountName = accountName;
             item.Id = "";
@@ -41,13 +41,13 @@ namespace Elementool.Test
         [TestMethod]
         public void GetIssueListFromControllerShouldReturnAnIssueList()
         {
-            var api = new IssuesController();
+            var api = new IssueDetailController();
             var item = new ElemenToolItem();
             item.AccountName = accountName;
             item.UserName = userName;
             item.Id = item.UserName + "@" + item.AccountName;
 
-            var isLogged = api.Get();
+           // var isLogged = api.Get();
             //Assert.IsTrue(isLogged.Count > 0);
 
         }
@@ -88,6 +88,16 @@ namespace Elementool.Test
             var api = new ElementoolApi(accountName, userName, password);
 
             var listOfIssues = api.GetIssueDetails(17760);
+
+            Assert.IsTrue(listOfIssues != null);
+        }
+
+        [TestMethod]
+        public void GetIssuesDetailsShouldReturnAListOfIssues()
+        {
+            var api = new ElementoolApi(accountName, userName, password);
+
+            var listOfIssues = api.GetIssueList();
 
             Assert.IsTrue(listOfIssues != null);
         }

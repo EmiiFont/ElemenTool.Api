@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Web.OData.Query;
 
 namespace ElemenTool.CacheLayer.Entities
 {
+    [Page(MaxTop = 100, PageSize = 15)]
+    [OrderBy("Id","SubmittedIn","SubmittedBy", "LastUpdateDate")]
+    [Filter("Id", "Status", "Title")]
     public class Issue
     {
         [JsonProperty(PropertyName = "id")]

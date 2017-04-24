@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using ElemenTool.CacheLayer.Entities;
 using ElementTool.WebApi.DataObjects;
 using ElementTool.WebApi.Infrastructure;
+using ElementTool.WebApi.Models;
+using System.Linq;
 
 namespace ElemenTool.CacheLayer.Infrastructure
 {
@@ -97,5 +99,24 @@ namespace ElemenTool.CacheLayer.Infrastructure
             return canLogin;
         }
 
+        public IEnumerable<Report> GetReportList(bool refresh = false)
+        {
+            _elementoolApi = new ElementoolApi(_accountItem.AccountName, _accountItem.UserName, _accountItem.Password);
+
+            var quick = _elementoolApi.GetReports();
+
+            var list = quick.Select(c => new Report() { Decription = c.Description, Id = c.ID, Name = c.Name });
+
+            return list;
+        }
+
+        public IEnumerable<Issue> GetIssuesByReportId(int id)
+        {
+            _elementoolApi = new ElementoolApi(_accountItem.AccountName, _accountItem.UserName, _accountItem.Password);
+
+            var quick = _elementoolApi.GetIssuesByReportId(id);
+
+            return quick;
+        }
     }
 }

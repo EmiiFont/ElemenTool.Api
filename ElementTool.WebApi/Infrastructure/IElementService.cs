@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ElemenTool.CacheLayer.Entities;
 using ElemenTool.Api.DataObjects;
 using ElementTool.WebApi.DataObjects;
+using ElementTool.WebApi.Models;
 
 namespace ElemenTool.CacheLayer.Infrastructure
 {
@@ -15,7 +16,8 @@ namespace ElemenTool.CacheLayer.Infrastructure
         List<Issue> AddIssueList(List<Issue> issue);
         IssueDetails GetIssueDetails(int issueNumber);
         List<Issue> GetIssueList(bool refresh = false);
-
+        IEnumerable<Report> GetReportList(bool refresh = false);
+        IEnumerable<Issue> GetIssuesByReportId(int id);
         IssueDetails SaveIssue(IssueDetails issueDetails);
         bool CanLogin(ElemenToolItem item);
         Task<IssueDetails> GetRefreshedIssueDetails(IssueDetails cachedIssueDetails);

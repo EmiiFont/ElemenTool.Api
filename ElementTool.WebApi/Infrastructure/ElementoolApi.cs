@@ -51,7 +51,7 @@ namespace ElemenTool.CacheLayer.Infrastructure
 
             string descr = "";
 
-            var reportResult = _btService.ExecuteCustomReport(repList, ref descr);
+            var reportResult = _btService.ExecuteCustomReport(new IssueField[0], ref descr);
 
             foreach (DataTable table in reportResult.Tables)
             {
@@ -71,7 +71,7 @@ namespace ElemenTool.CacheLayer.Infrastructure
                 }
             }
 
-            return listOfIssues.OrderByDescending(b => b.SubmittedIn).ToList();
+            return listOfIssues.OrderByDescending(b => b.Id).ToList();
         }
 
         public bool LoginCheck(ElemenToolItem accountItem)

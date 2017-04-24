@@ -1,22 +1,21 @@
-﻿using System.Web.Http;
-using ElemenTool.CacheLayer.Infrastructure;
-using ElementTool.WebApi.Infrastructure;
+﻿using ElemenTool.CacheLayer.Infrastructure;
 using ElementTool.WebApi.DataObjects;
+using ElementTool.WebApi.Infrastructure;
 using ElementTool.WebApi.Infrastructure.DbStorage;
-using ElementTool.WebApi.Infrastructure.Filters;
 using System.Security.Claims;
 using System.Linq;
-using System.Web.OData;
+using ElementTool.WebApi.Infrastructure.Filters;
+using System.Web.Http;
 
 namespace ElementTool.WebApi.Controllers
 {
     [JwtAuthentication]
-    [EnableQuery]
-    public class IssuesController : ODataController
+    public class ReportsController : ApiController
     {
         private ElementService _elementService;
         private ICache _cacheLayer;
-        public IssuesController()
+
+        public ReportsController()
         {
             _cacheLayer = new FirebaseStorage();
             _elementService = new ElementService(_cacheLayer);
@@ -27,16 +26,7 @@ namespace ElementTool.WebApi.Controllers
         {
             _elementService._accountItem = GetItemFromClaims();
 
-            var result = _elementService.GetIssueList();
-
-            return Ok(result.AsQueryable());
-        }
-
-        public IHttpActionResult Get(int key)
-        {
-            _elementService._accountItem = GetItemFromClaims();
-
-            var result = _elementService.GetIssuesByReportId(key);
+            var result = _elementService.GetReportList();
 
             return Ok(result);
         }

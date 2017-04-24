@@ -1,44 +1,38 @@
-﻿using System.Web.Http;
+﻿using System.Threading.Tasks;
+using System.Web.Http;
 using ElemenTool.CacheLayer.Infrastructure;
 using ElementTool.WebApi.Infrastructure;
 using ElementTool.WebApi.DataObjects;
 using ElementTool.WebApi.Infrastructure.DbStorage;
 using ElementTool.WebApi.Infrastructure.Filters;
 using System.Security.Claims;
-using System.Linq;
-using System.Web.OData;
 
 namespace ElementTool.WebApi.Controllers
 {
     [JwtAuthentication]
-    [EnableQuery]
-    public class IssuesController : ODataController
+    public class IssueDetailController : ApiController
     {
         private ElementService _elementService;
         private ICache _cacheLayer;
-        public IssuesController()
+       
+        public IssueDetailController()
         {
             _cacheLayer = new FirebaseStorage();
             _elementService = new ElementService(_cacheLayer);
         }
 
-        // GET tables/TodoItem
-        public IHttpActionResult Get()
+        public IHttpActionResult Get(int id)
         {
             _elementService._accountItem = GetItemFromClaims();
 
-            var result = _elementService.GetIssueList();
-
-            return Ok(result.AsQueryable());
-        }
-
-        public IHttpActionResult Get(int key)
-        {
-            _elementService._accountItem = GetItemFromClaims();
-
-            var result = _elementService.GetIssuesByReportId(key);
+            var result = _elementService.GetIssueDetails(id);
 
             return Ok(result);
+        }
+
+        public Task DeleteTodoItem(string id)
+        {
+            return new Task(() => { });
         }
 
         private ElemenToolItem GetItemFromClaims()
