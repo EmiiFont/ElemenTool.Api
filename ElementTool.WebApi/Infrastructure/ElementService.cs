@@ -110,6 +110,15 @@ namespace ElemenTool.CacheLayer.Infrastructure
             return list;
         }
 
+        public IEnumerable<Report> GetWelcomeReportList()
+        {
+             _elementoolApi = new ElementoolApi(_accountItem.AccountName, _accountItem.UserName, _accountItem.Password);
+
+            var quick = _elementoolApi.GetWelcomeReportList();
+
+            return quick;
+        }
+
         public IEnumerable<Issue> GetIssuesByReportId(int id)
         {
             _elementoolApi = new ElementoolApi(_accountItem.AccountName, _accountItem.UserName, _accountItem.Password);

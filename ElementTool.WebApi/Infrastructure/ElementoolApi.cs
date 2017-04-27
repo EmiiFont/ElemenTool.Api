@@ -268,6 +268,28 @@ namespace ElemenTool.CacheLayer.Infrastructure
             return BugTrackingIssueHelpers.GetNewIssueDetails(savedIssue);
         }
 
+        public List<Report> GetWelcomeReportList()
+        {
+            SetServiceCredentials();
+
+            var welcomeReports = _btService.GetWelcomeReports();
+            var reportlist = new List<Report>();
+
+            foreach (DataTable table in welcomeReports.Tables)
+            {
+                foreach (DataRow row in table.Rows)
+                {
+                    var hist = new Report();
+                    hist.Count = row[0].ToString();
+                    hist.Name = row[1].ToString();
+                    hist.WelcomeReportId = row[2].ToString();
+                    reportlist.Add(hist);
+                }
+            }
+
+            return reportlist;
+        }
+
         private IssueSystemFields GetSystemFieldsCaption(IssueField[] repList)
         {
             var issueSystemFields = new IssueSystemFields();

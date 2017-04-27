@@ -16,5 +16,7 @@ namespace ElementTool.WebApi.Models
         public string Name { get; set; }    
         public string Decription { get; set; }
         public IEnumerable<Issue> Issues { get; set; }
+        public string Count { get; set; }
+        public string WelcomeReportId { get; set; }
     }
 }

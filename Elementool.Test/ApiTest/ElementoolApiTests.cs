@@ -101,5 +101,14 @@ namespace Elementool.Test
 
             Assert.IsTrue(listOfIssues != null);
         }
+
+        [TestMethod]
+        public void GetI()
+        {
+            var api = new ElementoolApi(accountName, userName, password);
+             api.GetWelcomeReportList();
+
+            Assert.IsTrue(true);
+        }
     }
 }

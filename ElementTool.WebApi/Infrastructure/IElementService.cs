@@ -17,6 +17,7 @@ namespace ElemenTool.CacheLayer.Infrastructure
         IssueDetails GetIssueDetails(int issueNumber);
         List<Issue> GetIssueList(bool refresh = false);
         IEnumerable<Report> GetReportList(bool refresh = false);
+        IEnumerable<Report> GetWelcomeReportList();
         IEnumerable<Issue> GetIssuesByReportId(int id);
         IssueDetails SaveIssue(IssueDetails issueDetails);
         bool CanLogin(ElemenToolItem item);
