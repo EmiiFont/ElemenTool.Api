@@ -2,6 +2,7 @@
 using ElementTool.WebApi.DataObjects;
 using ElementTool.WebApi.Infrastructure;
 using ElementTool.WebApi.Infrastructure.DbStorage;
+using ElementTool.WebApi.Infrastructure.Filters;
 using ElementTool.WebApi.Infrastructure.Validator;
 using System;
 using System.Web.Http;
@@ -28,6 +29,12 @@ namespace ElementTool.WebApi.Controllers
             }
 
             return Unauthorized();
+        }
+
+        [JwtAuthentication]
+        public IHttpActionResult Get()
+        {
+            return Ok(true);
         }
 
         private bool CheckUser(string account, string username, string password)

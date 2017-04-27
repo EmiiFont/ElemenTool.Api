@@ -38,6 +38,19 @@ namespace ElementTool.WebApi
             JobStorage.Current = firebaseStorage;
 
             _backgroundJobServer = new BackgroundJobServer();
+
+        }
+        protected void Application_BeginRequest(Object sender, EventArgs e)
+        {
+            //HttpContext.Current.Response.AddHeader("Access-Control-Allow-Origin", "*");
+            if (HttpContext.Current.Request.HttpMethod == "OPTIONS")
+            {
+                HttpContext.Current.Response.AddHeader("Cache-Control", "no-cache");
+                HttpContext.Current.Response.AddHeader("Access-Control-Allow-Methods", "GET, POST");
+                HttpContext.Current.Response.AddHeader("Access-Control-Allow-Headers", "Content-Type, Accept, Authorization");
+                HttpContext.Current.Response.AddHeader("Access-Control-Max-Age", "1728000");
+                HttpContext.Current.Response.End();
+            }
         }
         protected void Application_End(object sender, EventArgs e)
         {
