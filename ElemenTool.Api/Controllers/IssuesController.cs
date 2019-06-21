@@ -41,7 +41,7 @@ namespace ElemenTool.Api.Controllers
 
             if (existing == null)
             {
-                _context.InsertElementToolEntity(item);
+                _cacheLayer.InsertElementToolEntity(item);
             }
             else
             {

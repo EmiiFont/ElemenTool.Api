@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using ElemenTool.CacheLayer.Entities;
 using System.Threading.Tasks;
+using ElemenTool.Api.DataObjects;
 
 namespace ElemenTool.Api.Infrastructure
 {
@@ -29,5 +30,8 @@ namespace ElemenTool.Api.Infrastructure
 
         List<Issue> GetIssueListFromStore();
         void AddIssueList(object p, List<Issue> issuelist);
+
+        void InsertElementToolEntity(ElemenToolItem item);
+
     }
 }

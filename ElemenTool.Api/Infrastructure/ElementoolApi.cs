@@ -11,6 +11,7 @@ using ElemenTool.Api.com.elementool.www;
 using ElemenTool.Api.Infrastructure.helpers;
 using ElemenTool.Api.DataObjects;
 using System.Linq;
+using ElemenTool.Api.Models;
 
 namespace ElemenTool.CacheLayer.Infrastructure
 {
@@ -19,12 +20,21 @@ namespace ElemenTool.CacheLayer.Infrastructure
         private readonly string _eToolAccountName;
         private readonly string _eToolUserName;
         private readonly string _eToolUserPasswd;
-        
+        private BugTracking _btService;
+
         public ElementoolApi(string eToolAccountName, string eToolUserName, string eToolUserPasswd)
         {
             _eToolAccountName = eToolAccountName;
             _eToolUserName = eToolUserName;
             _eToolUserPasswd = eToolUserPasswd;
+
+            _btService = new BugTracking();
+            //(user name = "account\username")
+            UsernameToken token = new UsernameToken(_eToolAccountName + @"\" + _eToolUserName, _eToolUserPasswd, PasswordOption.SendHashed);
+
+            _btService.RequestSoapContext.Security.Tokens.Add(token);
+
+            _btService.RequestSoapContext.Security.Elements.Add(new MessageSignature(token));
         }
 
         public ElementoolApi()
@@ -34,22 +44,16 @@ namespace ElemenTool.CacheLayer.Infrastructure
 
         public List<Issue> GetIssueList()
         {
-            //create an instance of the proxy class
-            var btService = new BugTracking();
-            //(user name = "account\username")
-            UsernameToken token = new UsernameToken(_eToolAccountName + @"\" + _eToolUserName, _eToolUserPasswd, PasswordOption.SendHashed);
-            btService.RequestSoapContext.Security.Tokens.Add(token);
-            btService.RequestSoapContext.Security.Elements.Add(new MessageSignature(token));
-            //this method does nothing but throws an exception if login info is incorrect
-
             var listOfIssues = new List<Issue>();
 
-            IssueField[] repList = btService.GetCustomReportQueryFields(false);
+            IssueField[] repList = _btService.GetCustomReportQueryFields(false);
             var fields = GetSystemFieldsCaption(repList);
 
             string descr = "";
-           
-            var reportResult = btService.ExecuteCustomReport(repList, ref descr);
+
+            var quickReportsList = _btService.GetQuickReportsList();
+            var reportResult = _btService.ExecuteWelcomeReport(quickReportsList[0].ID.ToString(), ref descr);
+            //var reportResult = btService.ExecuteCustomReport(repList, ref descr);
 
             foreach (DataTable table in reportResult.Tables)
             {
@@ -69,6 +73,20 @@ namespace ElemenTool.CacheLayer.Infrastructure
 
             return listOfIssues.OrderByDescending(b => b.SubmittedIn).ToList();
         }
+
+
+        public List<Reports> GetQuickReports()
+        {
+            var quickReportsList = _btService.GetQuickReportsList();
+            var att = _btService.GetIssueAttachments(19071);
+            var k = _btService.GetIssueAttachmentsInfo(19071);
+            bool fileIsEmpty = false;
+            bool fileexist = true;
+            
+            var b = _btService.DownloadAttachment(att[0], ref fileIsEmpty, ref fileexist);
+
+            return quickReportsList.Select(v => new Reports(v)).ToList();
+        } 
 
         public bool LoginCheck(ElemenToolItem accountItem)
         {
@@ -93,16 +111,18 @@ namespace ElemenTool.CacheLayer.Infrastructure
 
         public IssueDetails GetIssueDetails(int issueNumber)
         {
-            //create an instance of the proxy class
-            var btService = new BugTracking();
+            ////create an instance of the proxy class
+            //var btService = new BugTracking();
           
-            //(user name = "account\username")
-            UsernameToken token = new UsernameToken(_eToolAccountName + @"\" + _eToolUserName, _eToolUserPasswd, PasswordOption.SendHashed);
-            btService.RequestSoapContext.Security.Tokens.Add(token);
-            btService.RequestSoapContext.Security.Elements.Add(new MessageSignature(token));
+            ////(user name = "account\username")
+            //UsernameToken token = new UsernameToken(_eToolAccountName + @"\" + _eToolUserName, _eToolUserPasswd, PasswordOption.SendHashed);
+            //btService.RequestSoapContext.Security.Tokens.Add(token);
+            //btService.RequestSoapContext.Security.Elements.Add(new MessageSignature(token));
            
             //this method does nothing but throws an exception if login info is incorrect
-            BugTrackingIssue repList = btService.GetIssueByNum(issueNumber);
+            BugTrackingIssue repList = _btService.GetIssueByNum(issueNumber);
+            var d = GetIssueHistory(issueNumber);
+            var a = GetIssueRemarks(issueNumber);
 
             var issue = new IssueDetails();
             issue.IssueNumber = repList.IssueNumber;
@@ -124,6 +144,53 @@ namespace ElemenTool.CacheLayer.Infrastructure
                 issue.Fields.Add(fields);
             }
             return issue;
+        }
+
+        private List<IssueRemarks> GetIssueRemarks(int issueNumber)
+        {
+            var ar = _btService.GetIssueRemarks(issueNumber);
+            List<IssueRemarks> listOfIssues = new List<IssueRemarks>();
+
+            foreach (DataTable table in ar.Tables)
+            {
+                foreach (DataRow row in table.Rows)
+                {
+                    var remark = new IssueRemarks();
+                    remark.RemarkText = row["remark_text"].ToString();
+                    remark.UserName = row["user_name"].ToString();
+                    remark.DateTime = string.IsNullOrEmpty(Convert.ToString(row["Date"])) ? DateTime.MinValue : Convert.ToDateTime(row["Date"]);
+                    remark.Time = string.IsNullOrEmpty(Convert.ToString(row["Time"])) ? DateTime.Now.TimeOfDay : Convert.ToDateTime(row["Time"]).TimeOfDay;
+
+                    listOfIssues.Add(remark);
+                }
+            }
+
+            return listOfIssues;
+        }
+
+        
+
+        private List<IssueHistory> GetIssueHistory(int issueNumber)
+        {
+            var ar = _btService.GetIssueHistory(issueNumber);
+            List<IssueHistory> listOfIssues = new List<IssueHistory>();
+
+            foreach (DataTable table in ar.Tables)
+            {
+                foreach (DataRow row in table.Rows)
+                {
+                    var remark = new IssueHistory();
+                    remark.Change = row["change"].ToString();
+                    remark.FieldName = row["field_name"].ToString();
+                    remark.UserName = row["user_name"].ToString();
+                    remark.DateTime = string.IsNullOrEmpty(Convert.ToString(row["Date"])) ? DateTime.MinValue : Convert.ToDateTime(row["Date"]);
+                    remark.Time = string.IsNullOrEmpty(Convert.ToString(row["Time"])) ? DateTime.Now.TimeOfDay : Convert.ToDateTime(row["Time"]).TimeOfDay;
+
+                    listOfIssues.Add(remark);
+                }
+            }
+
+            return listOfIssues;
         }
 
         public IssueDetails SaveIssue(IssueDetails issueDetails)

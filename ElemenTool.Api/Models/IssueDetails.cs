@@ -66,6 +66,23 @@ namespace ElemenTool.CacheLayer.Entities
         }
     }
 
+    public class IssueHistory
+    {
+        public string FieldName { get; set; }
+        public string Change { get; set; }
+        public string UserName { get; set; }
+        public DateTime DateTime { get; set; }
+        public TimeSpan Time { get; set; }
+    }
+
+    public class IssueRemarks
+    {
+        public string UserName { get; set; }
+        public string RemarkText { get; set; }
+        public DateTime DateTime { get; set; }
+        public TimeSpan Time { get; set; }
+    }
+
     public class IssueDetailsFields
     {
         public string Value { get; set; }

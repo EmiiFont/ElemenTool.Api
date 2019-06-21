@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ElemenTool.Api.DataObjects;
 using ElemenTool.CacheLayer.Entities;
 using SQLite;
 using ElemenTool.Api.Infrastructure;
@@ -25,6 +26,15 @@ namespace ElemenTool.CacheLayer.Infrastructure
         public void AddIssueList(object p, List<Issue> issuelist)
         {
             throw new NotImplementedException();
+        }
+
+        public async void InsertElementToolEntity(ElemenToolItem item)
+        {
+            var conn = new SQLiteAsyncConnection("foofoo.db");
+
+            await conn.CreateTableAsync<ElemenToolItem>();
+
+            await conn.InsertAsync(item);
         }
 
         public async Task<List<Issue>> AddIssueList(string cacheKey, List<Issue> item)
