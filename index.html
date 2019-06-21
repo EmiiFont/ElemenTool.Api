@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="https://www.gstatic.com/firebasejs/3.7.7/firebase.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyAzoD_yOyWkOMDx8KWl_WIle43IkBXYeQ4",
+        authDomain: "elementool-436c2.firebaseapp.com",
+        databaseURL: "https://elementool-436c2.firebaseio.com",
+        projectId: "elementool-436c2",
+        storageBucket: "elementool-436c2.appspot.com",
+        messagingSenderId: "81958851355"
+    };
+    firebase.initializeApp(config);
+
+     var database = firebase.database();
+     $.ajax({
+        url:"http://localhost:12597/api/Values/EFont@theabsgroup",
+        dataType: 'json', // Notice! JSONP <-- P (lowercase)
+        success:function(json){
+            // do stuff with json (in this case an array)
+            for(var i=0; i<= json.length; i++){
+                firebase.database().ref('/issues').push(json[i]);
+            }
+        },
+        error:function(e){
+            //console.log(e);
+        }      
+    }).done(function( data ) {
+    if ( console && console.log ) {
+      console.log(data);
+    }
+  });;
+
+     function writeUserData(userId, name, email, imageUrl) {
+        firebase.database().ref('users/' + userId).set({
+            username: name,
+            email: email,
+            profile_picture : imageUrl
+        });
+     }
+       function check( ) {
+                    //Check with server. Should I set status to inactive
+                    console.log("Emi");
+                    var timer = setTimeout(check, 60 * 1000);
+                }
+                
+            check();
+    </script>
+  </head>
+  <body>
+  
+  </body>
+</html>
