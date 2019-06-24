@@ -10,6 +10,7 @@ using ElementTool.WebApi.DataObjects;
 using ElementTool.WebApi.Infrastructure.helpers;
 using SharpRaven;
 using System.Configuration;
+using System.Data.Entity.Core.Common.CommandTrees;
 using SharpRaven.Data;
 using ElementTool.WebApi.Models;
 
@@ -30,7 +31,9 @@ namespace ElemenTool.CacheLayer.Infrastructure
             _eToolUserName = eToolUserName;
             _eToolUserPasswd = eToolUserPasswd;
             _btService = new BugTracking();
-            _sentryLog = new RavenClient(sentryDSN);
+
+            if (!string.IsNullOrEmpty(sentryDSN))
+                _sentryLog = new RavenClient(sentryDSN);
         }
 
         public ElementoolApi()

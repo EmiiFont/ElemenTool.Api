@@ -79,12 +79,12 @@ namespace ElementTool.WebApi.Infrastructure.Filters
             if (string.IsNullOrEmpty(elementoolClaim.Username) && string.IsNullOrEmpty(elementoolClaim.AccountName))
                 return false;
 
-            var _context = new FirebaseStorage();
+            //var _context = new FirebaseStorage();
 
-            var existing = _context.GetAccountItem(elementoolClaim.AccountName, elementoolClaim.Username);
+            //var existing = _context.GetAccountItem(elementoolClaim.AccountName, elementoolClaim.Username);
 
-            if (existing == null)
-                return false;
+           // if (existing == null)
+                //return false;
 
             return true;
         }

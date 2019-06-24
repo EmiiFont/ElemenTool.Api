@@ -19,7 +19,7 @@ namespace ElementTool.WebApi
             //GlobalConfiguration.Configuration.UseFirebaseStorage(, );
 
         
-            app.UseHangfireDashboard();
+           // app.UseHangfireDashboard();
         }
     }
 }

@@ -52,21 +52,23 @@ namespace ElemenTool.CacheLayer.Infrastructure
         {
             _elementoolApi = new ElementoolApi(_accountItem.AccountName, _accountItem.UserName, _accountItem.Password);
 
-            //TODO: check for cache date if is more than 3 hours load from api.
-            if(_documentStorage.GetIssueListFromStore(_accountItem.AccountName).Count == 0)
-            {
-                var issuelist = _elementoolApi.GetIssueList();
-                _documentStorage.AddToProcessTable(_accountItem.UserName, _accountItem.AccountName);
-                //await Task.Run(() => _documentStorage.AddIssueList(null, issuelist));
+            ////TODO: check for cache date if is more than 3 hours load from api.
+            //if(_documentStorage.GetIssueListFromStore(_accountItem.AccountName).Count == 0)
+            //{
+            //    var issuelist = _elementoolApi.GetIssueList();
+            //    _documentStorage.AddToProcessTable(_accountItem.UserName, _accountItem.AccountName);
+            //    //await Task.Run(() => _documentStorage.AddIssueList(null, issuelist));
 
-                return issuelist;
-            }
-            if (refresh)
-            {
-                return _elementoolApi.GetIssueList();
-            }
+            //    return issuelist;
+            //}
+            //if (refresh)
+            //{
+            //    return _elementoolApi.GetIssueList();
+            //}
 
-            return _documentStorage.GetIssueListFromStore(_accountItem.AccountName);
+            //return _documentStorage.GetIssueListFromStore(_accountItem.AccountName);
+
+            return _elementoolApi.GetIssueList();
         }
 
         public async Task<IssueDetails> GetRefreshedIssueDetails(IssueDetails cachedIssueDetails)

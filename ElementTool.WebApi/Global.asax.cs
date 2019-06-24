@@ -32,12 +32,12 @@ namespace ElementTool.WebApi
             string firebaseUrl = ConfigurationManager.AppSettings["firebaseUrl"];
             string authSecret = ConfigurationManager.AppSettings["authSecret"];
 
-            Hangfire.Firebase.FirebaseStorage firebaseStorage = new Hangfire.Firebase.FirebaseStorage(firebaseUrl, authSecret);
-            Hangfire.GlobalConfiguration.Configuration.UseStorage(firebaseStorage);
+          //  Hangfire.Firebase.FirebaseStorage firebaseStorage = new Hangfire.Firebase.FirebaseStorage(firebaseUrl, authSecret);
+          //  Hangfire.GlobalConfiguration.Configuration.UseStorage(firebaseStorage);
 
-            JobStorage.Current = firebaseStorage;
+          //  JobStorage.Current = firebaseStorage;
 
-            _backgroundJobServer = new BackgroundJobServer();
+          //  _backgroundJobServer = new BackgroundJobServer();
 
         }
         protected void Application_BeginRequest(Object sender, EventArgs e)

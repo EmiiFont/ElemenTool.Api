@@ -324,7 +324,6 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="connectionStrings.config" />
-    <Content Include="appSettings.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

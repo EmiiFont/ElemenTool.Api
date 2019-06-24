@@ -16,8 +16,10 @@ namespace ElementTool.WebApi.Infrastructure.Validator
 
         public static string GenerateToken(ElemenToolItem item, int expireMinutes = 20)
         {
+            
             var symmetricKey = Convert.FromBase64String(Secret);
             var tokenHandler = new JwtSecurityTokenHandler();
+           
 
             var now = DateTime.UtcNow;
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -36,7 +38,8 @@ namespace ElementTool.WebApi.Infrastructure.Validator
             };
 
             var stoken = tokenHandler.CreateToken(tokenDescriptor);
-            var token = tokenHandler.WriteToken(stoken);
+            //var token = tokenHandler.WriteToken(stoken);
+            var token = tokenHandler.CreateEncodedJwt(tokenDescriptor);
 
             return token;
         }
@@ -67,7 +70,7 @@ namespace ElementTool.WebApi.Infrastructure.Validator
                 return principal;
             }
 
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }

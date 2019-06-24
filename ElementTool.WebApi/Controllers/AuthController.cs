@@ -47,20 +47,20 @@ namespace ElementTool.WebApi.Controllers
             newItem.UpdatedAt = DateTime.Now;
             newItem.CreatedAt = DateTime.Now;
 
-            var existing = _context.GetAccountItem(newItem.AccountName, newItem.UserName);
+            //var existing = _context.GetAccountItem(newItem.AccountName, newItem.UserName);
 
-            if (existing == null)
-            {
-                _context.InsertElementToolEntity(newItem);
-            }
-            else
-            {
-                if (existing.Password != newItem.Password)
-                {
-                    existing.Password = newItem.Password;
-                    _context.UpdateAccountItem(existing);
-                }
-            }
+            //if (existing == null)
+            //{
+            //    _context.InsertElementToolEntity(newItem);
+            //}
+            //else
+            //{
+            //    if (existing.Password != newItem.Password)
+            //    {
+            //        existing.Password = newItem.Password;
+            //        _context.UpdateAccountItem(existing);
+            //    }
+            //}
 
             return _elementService.CanLogin(newItem);
         }

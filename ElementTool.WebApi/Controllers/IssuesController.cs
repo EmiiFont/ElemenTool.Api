@@ -11,8 +11,7 @@ using System.Web.OData;
 namespace ElementTool.WebApi.Controllers
 {
     [JwtAuthentication]
-    [EnableQuery]
-    public class IssuesController : ODataController
+    public class IssuesController : ApiController
     {
         private ElementService _elementService;
         private ICache _cacheLayer;
