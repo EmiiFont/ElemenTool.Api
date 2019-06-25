@@ -33,7 +33,7 @@ namespace ElemenTool.CacheLayer.Infrastructure
             _btService = new BugTracking();
 
             if (!string.IsNullOrEmpty(sentryDSN))
-                _sentryLog = new RavenClient(sentryDSN);
+                _sentryLog = new RavenClient("https://b35c3943705d454188b1771398e34886:886f1ab4f9aa456fb4ebd10c358ff289@sentry.io/158236");
         }
 
         public ElementoolApi()
@@ -169,6 +169,23 @@ namespace ElemenTool.CacheLayer.Infrastructure
             return null;
         }
 
+        public void SaveIssueDetails(IssueDetails issueDetails)
+        {
+            var bugtt = issueDetails.MapToBugTrackingIssue();
+
+            try
+            {
+                SetServiceCredentials();
+
+                _btService.SaveIssue(bugtt);
+            }
+            catch (Exception ex)
+            {
+                _sentryLog.Capture(new SentryEvent(ex));
+            }
+          
+        }
+
         public IssueDetails GetIssueDetails(int issueNumber)
         {
             SetServiceCredentials();
@@ -188,9 +205,8 @@ namespace ElemenTool.CacheLayer.Infrastructure
             issue.Title = repList.FieldsArray[0].Value;
             issue.Description = repList.FieldsArray[1].Value;
             issue.StepstoReproduce = repList.FieldsArray[2].Value;
-            issue.Product = repList.FieldsArray[3].Value;
 
-            foreach (var item in repList.FieldsArray.Skip(4))
+            foreach (var item in repList.FieldsArray.Skip(3))
             {
                 var value = item.Value;
 

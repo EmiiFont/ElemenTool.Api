@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ElementTool.WebApi.com.elementool.www;
 
 namespace ElemenTool.CacheLayer.Entities
 {
@@ -98,6 +99,26 @@ namespace ElemenTool.CacheLayer.Entities
                 }
                 _remarks = value;
             }
+        }
+
+        public BugTrackingIssue MapToBugTrackingIssue()
+        {
+            var bugTracking = new BugTrackingIssue();
+            bugTracking.IssueNumber = IssueNumber;
+
+            var fields = new List<IssueField>();
+            foreach (var item in Fields)
+            {
+                var fieldArr = new IssueField();
+                fieldArr.Caption = item.Caption;
+                fieldArr.Value = item.Value;
+                fieldArr.ValueList = item.OptionList;
+
+                fields.Add(fieldArr);
+            }
+
+            bugTracking.FieldsArray = fields.ToArray();
+            return bugTracking;
         }
     }
 

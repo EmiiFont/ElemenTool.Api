@@ -23,7 +23,10 @@ namespace ElemenTool.CacheLayer.Infrastructure
 
         public IssueDetails AddIssueDetails(IssueDetails issueDetails)
         {
-            throw new NotImplementedException();
+            _elementoolApi = new ElementoolApi(_accountItem.AccountName, _accountItem.UserName, _accountItem.Password);
+            _elementoolApi.SaveIssueDetails(issueDetails);
+
+            return issueDetails;
         }
 
         public List<Issue> AddIssueList(List<Issue> issue)

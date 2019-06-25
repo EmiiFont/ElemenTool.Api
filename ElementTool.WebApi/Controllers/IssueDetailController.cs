@@ -6,6 +6,7 @@ using ElementTool.WebApi.DataObjects;
 using ElementTool.WebApi.Infrastructure.DbStorage;
 using ElementTool.WebApi.Infrastructure.Filters;
 using System.Security.Claims;
+using ElemenTool.CacheLayer.Entities;
 
 namespace ElementTool.WebApi.Controllers
 {
@@ -29,6 +30,16 @@ namespace ElementTool.WebApi.Controllers
 
             return Ok(result);
         }
+
+        public IHttpActionResult Post(IssueDetails issue)
+        {
+            _elementService._accountItem = GetItemFromClaims();
+
+            var result = _elementService.SaveIssue(issue);
+
+            return Ok(result);
+        }
+
 
         public Task DeleteTodoItem(string id)
         {

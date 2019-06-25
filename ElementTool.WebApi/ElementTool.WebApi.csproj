@@ -430,6 +430,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="appSettings.config" />
+    <None Include="Properties\PublishProfiles\ElementToolWebApi - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\ElementToolWebApi - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <None Include="Properties\Settings.settings">
