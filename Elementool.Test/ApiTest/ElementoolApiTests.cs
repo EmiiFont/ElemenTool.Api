@@ -62,6 +62,15 @@ namespace Elementool.Test
         }
 
         [TestMethod]
+        public void GetWelcomeReportsFromElementooApi()
+        {
+            var api = new ElementoolApi(accountName, userName, password);
+
+            var isLogged = api.GetWelcomeReports();
+            //Assert.IsTrue(isLogged.Count > 0);
+        }
+
+        [TestMethod]
         public void GetIssuesByQuickReportIDShouldReturnAListOfIssues()
         {
             var api = new ElementoolApi(accountName, userName, password);
@@ -116,7 +125,7 @@ namespace Elementool.Test
         public void GetQuickReport()
         {
             var api = new ElementoolApi("", "EFont", "");
-            var mylist = api.GetQuickReports();
+           // var mylist = api.GetQuickReports();
         }
 
         [TestMethod]

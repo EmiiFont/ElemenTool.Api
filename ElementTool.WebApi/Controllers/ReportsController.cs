@@ -31,6 +31,15 @@ namespace ElementTool.WebApi.Controllers
             return Ok(result);
         }
 
+        public IHttpActionResult Get(int id)
+        {
+            _elementService._accountItem = GetItemFromClaims();
+
+            var result = _elementService.GetIssuesByReportId(id);
+
+            return Ok(result);
+        }
+
         private ElemenToolItem GetItemFromClaims()
         {
             var identity = (ClaimsIdentity)User.Identity;

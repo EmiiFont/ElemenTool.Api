@@ -11,6 +11,7 @@ using ElementTool.WebApi.Infrastructure.helpers;
 using SharpRaven;
 using System.Configuration;
 using System.Data.Entity.Core.Common.CommandTrees;
+using System.Web.Configuration;
 using SharpRaven.Data;
 using ElementTool.WebApi.Models;
 
@@ -102,6 +103,31 @@ namespace ElemenTool.CacheLayer.Infrastructure
             var userReports = _btService.GetQuickReportsList();
 
             return userReports;
+        }
+
+
+        public List<WelcomeReport> GetWelcomeReports()
+        {
+            SetServiceCredentials();
+
+            var userReports = _btService.GetWelcomeReports();
+
+            var listRpo = new List<WelcomeReport>();
+            foreach (DataTable table in userReports.Tables)
+            {
+                foreach (DataRow row in table.Rows)
+                {
+                    var wr = new WelcomeReport();
+                    wr.Id = row["reportID"].ToString();
+                    wr.IssuesCount = Convert.ToInt32(row["Count"]);
+                    wr.Status = row["status"].ToString();
+                    wr.Name = table.TableName;
+                    
+                    listRpo.Add(wr);
+                }
+            }
+
+            return listRpo;
         }
 
         public List<Issue> GetIssuesByReportId(int reportId)
@@ -337,6 +363,7 @@ namespace ElemenTool.CacheLayer.Infrastructure
             DateTime res = new DateTime();
 
             var d = _btService.GetIssueHistory(issueNumber);
+           // _btService.ExecuteQuickReport()
 
             foreach (DataTable table in d.Tables)
             {
@@ -360,5 +387,14 @@ namespace ElemenTool.CacheLayer.Infrastructure
             _btService.RequestSoapContext.Security.Tokens.Add(token);
             _btService.RequestSoapContext.Security.Elements.Add(new MessageSignature(token));
         }
+    }
+
+    public class WelcomeReport
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public int IssuesCount { get; set; }
+        public string Description { get; set; }
+        public string Status { get; set; }
     }
 }
